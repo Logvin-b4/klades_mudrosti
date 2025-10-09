@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm> // Для std::remove_if
+#include <memory>
 using namespace std;
 
 // Базовый класс "Артефакт"
@@ -45,7 +46,7 @@ public:
 };
 
 // Контейнер для хранения артефактов
-vector<Artefact*> container;
+vector<shared_ptr<Artefact>> container; // Заменили vector<Artefact*> на shared_ptr
 
 // Функция для добавления объекта
 void addObject() {
@@ -67,12 +68,12 @@ void addObject() {
     if (type == 1) {
         cout << "Введите автора: ";
         getline(cin, extra);
-        container.push_back(new Aphorism(content, extra, year));
+        container.push_back(make_shared<Aphorism>(content, extra, year));
     }
     else if (type == 2) {
         cout << "Введите страну: ";
         getline(cin, extra);
-        container.push_back(new Proverb(content, extra, year));
+        container.push_back(make_shared<Proverb>(content, extra, year));
     }
     else {
         cout << "Неверный тип объекта!" << endl;
@@ -101,19 +102,19 @@ void removeObject() {
 
     container.erase(
         remove_if(container.begin(), container.end(),
-            [&](Artefact* obj) {
+            [&](const shared_ptr<Artefact>& obj) {
                 bool toDelete = false;
                 switch (choice) {
                 case 1:
                     if (obj->content.find(keyword) != string::npos) toDelete = true;
                     break;
                 case 2:
-                    if (Aphorism* a = dynamic_cast<Aphorism*>(obj)) {
+                    if (auto a = dynamic_pointer_cast<Aphorism>(obj)) {
                         if (a->author.find(keyword) != string::npos) toDelete = true;
                     }
                     break;
                 case 3:
-                    if (Proverb* p = dynamic_cast<Proverb*>(obj)) {
+                    if (auto p = dynamic_pointer_cast<Proverb>(obj)) {
                         if (p->country.find(keyword) != string::npos) toDelete = true;
                     }
                     break;
@@ -124,7 +125,6 @@ void removeObject() {
                     cout << "Неверный выбор поля!" << endl;
                     break;
                 }
-                if (toDelete) delete obj;
                 return toDelete;
             }),
         container.end());
@@ -161,7 +161,7 @@ int main() {
     }
 
     // Очистка памяти
-    for (auto obj : container) delete obj;
+    //for (auto obj : container) delete obj;
 
     return 0;
 }
