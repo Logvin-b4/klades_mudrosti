@@ -152,6 +152,7 @@ int main() {
     while (true) {
         cout << "\nВведите команду: ";
         cin >> command;
+        transform(command.begin(), command.end(), command.begin(), ::toupper);
 
         if (command == "ADD") addObject();
         else if (command == "REM") removeObject();
