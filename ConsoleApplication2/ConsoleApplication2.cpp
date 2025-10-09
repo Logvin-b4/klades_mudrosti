@@ -134,9 +134,10 @@ void removeObject() {
 void printContainer() {
     if (container.empty()) {
         cout << "Контейнер пуст!" << endl;
+        return;
     }
     else {
-        for (const auto obj : container) {
+        for (const auto& obj : container) {
             obj->print();
         }
     }
