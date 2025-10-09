@@ -136,7 +136,7 @@ void printContainer() {
         cout << "Контейнер пуст!" << endl;
     }
     else {
-        for (auto obj : container) {
+        for (const auto obj : container) {
             obj->print();
         }
     }
