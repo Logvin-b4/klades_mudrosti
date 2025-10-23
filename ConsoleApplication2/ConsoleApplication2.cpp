@@ -9,7 +9,7 @@ using namespace std;
 class Artefact {
 public:
     string content; // Содержание
-    int year;       // Год создания
+    int year;       // Год  создания
 
     Artefact(const string& c, int y) : content(c), year(y) {}
 
